@@ -52,7 +52,7 @@ jobs:
           ${{ hashFiles( 'vcpkg_manifest/vcpkg.json' ) }}-${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}-${{ matrix.triplet }}-invalidate
     
     - name: Install dependencies
-      run: ${{ VCPKG_ROOT }}/vcpkg install protobuf protobuf:x64-windows
+      run: ${{ env.VCPKG_ROOT }}/vcpkg install protobuf protobuf:x64-windows
     
     - name: Configure CMake
       run: cmake -S "${{github.workspace}}" -B "${{env.CMAKE_BUILD_DIR}}"
