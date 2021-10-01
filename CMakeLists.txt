@@ -1,7 +1,14 @@
 cmake_minimum_required(VERSION 3.0.0)
 
+# Auto-detect vcpkg path
+if(WIN32)
+    file (STRINGS "$ENV{LOCALAPPDATA}/vcpkg/vcpkg.path.txt" VCPKG_PATH)
+else()
+    file (STRINGS "$ENV{HOME}/.vcpkg/vcpkg.path.txt" VCPKG_PATH)
+endif()
+
 # Edit this to target your vcpkg toolchain
-set(CMAKE_TOOLCHAIN_FILE "C:/_work/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE "${VCPKG_PATH}/scripts/buildsystems/vcpkg.cmake")
 
 project(SlimeVR-OpenVR-Driver VERSION 0.2.0)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
