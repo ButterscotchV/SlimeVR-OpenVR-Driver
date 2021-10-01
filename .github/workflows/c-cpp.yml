@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest] # Others are disabled, this only targets Windows
         include:
           - os: ubuntu-latest
             triplet: x64-linux
@@ -72,3 +72,11 @@ jobs:
       
     - name: Build
       run: cmake --build "${{env.CMAKE_BUILD_DIR}}" --config Release --target ALL_BUILD -j 6 --
+      
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        # Artifact name
+        name: slimevr-openvr-driver-${{ matrix.triplet }} # optional, default is artifact
+        # A file, directory or wildcard pattern that describes what to upload
+        path: ${{env.CMAKE_BUILD_DIR}}/Release/driver
