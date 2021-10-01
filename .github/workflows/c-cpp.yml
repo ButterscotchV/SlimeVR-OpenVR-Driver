@@ -8,6 +8,7 @@ jobs:
     name: ${{ matrix.os }} Build
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
@@ -52,11 +53,11 @@ jobs:
           ${{ hashFiles( 'vcpkg_manifest/vcpkg.json' ) }}-${{ hashFiles( '.git/modules/vcpkg/HEAD' )}}-${{ matrix.triplet }}-invalidate
     
     - if: matrix.os == 'windows-latest'
-      name: Set up vcpkg
+      name: Set up vcpkg for Windows
       run: ${{ env.VCPKG_ROOT }}/bootstrap-vcpkg.bat
       
     - if: matrix.os != 'windows-latest'
-      name: Set up vcpkg
+      name: Set up vcpkg for Unix
       run: ${{ env.VCPKG_ROOT }}/bootstrap-vcpkg.sh
     
     - name: Install dependencies
