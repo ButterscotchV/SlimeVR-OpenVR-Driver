@@ -4,20 +4,17 @@ on: [ push, pull_request ]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+  
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
     
-    - name: configure
-      run: ./configure
+    - name: Configure CMake
+      run: cmake -S "${{github.workspace}}" -B "${{github.workspace}}/build"
       
-    - name: make
-      run: make
-      
-    - name: make check
-      run: make check
-      
-    - name: make distcheck
-      run: make distcheck
+    - name: Build
+      run: cmake --build "${{github.workspace}}/build" --config Release --target ALL_BUILD -j 6 --
