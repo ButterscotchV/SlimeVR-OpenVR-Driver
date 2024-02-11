@@ -43,9 +43,9 @@ std::string GetViveRoleHint(TrackerRole role) {
         case RIGHT_ELBOW:
             return "vive_tracker_right_elbow";
         case LEFT_KNEE:
-            return "vive_tracker_left_knee";
+            return "vive_tracker_camera";
         case RIGHT_KNEE:
-            return "vive_tracker_right_knee";
+            return "vive_tracker_keyboard";
         case WAIST:
             return "vive_tracker_waist";
         case CHEST:
@@ -79,9 +79,9 @@ std::string GetViveRole(TrackerRole role) {
         case RIGHT_ELBOW:
             return "TrackerRole_RightElbow";
         case LEFT_KNEE:
-            return "TrackerRole_LeftKnee";
+            return "TrackerRole_Camera";
         case RIGHT_KNEE:
-            return "TrackerRole_RightKnee";
+            return "TrackerRole_Keyboard";
         case WAIST:
             return "TrackerRole_Waist";
         case CHEST:
