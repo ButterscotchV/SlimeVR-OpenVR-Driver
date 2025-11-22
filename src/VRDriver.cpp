@@ -141,6 +141,8 @@ void SlimeVRDriver::VRDriver::RunPoseRequestThread() {
             vel.v[2] = vel_z;
         }
 
+        auto now = std::chrono::steady_clock::now();
+
         messages::Position* hmd_position = google::protobuf::Arena::CreateMessage<messages::Position>(&arena_);
         message->set_allocated_position(hmd_position);
         hmd_position->set_tracker_id(0);
@@ -155,9 +157,9 @@ void SlimeVRDriver::VRDriver::RunPoseRequestThread() {
         hmd_position->set_vel_x(vel.v[0]);
         hmd_position->set_vel_y(vel.v[1]);
         hmd_position->set_vel_z(vel.v[2]);
+        hmd_position->set_timestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(now - hmd_pose_epoch_).count());
         bridge_->SendBridgeMessage(*message);
 
-        auto now = std::chrono::steady_clock::now();
         if (std::chrono::duration_cast<std::chrono::milliseconds>(now - battery_sent_at_).count() > 100) {
             vr::ETrackedPropertyError err;
             if (vr::VRProperties()->GetBoolProperty(hmd_prop_container, vr::Prop_DeviceProvidesBatteryStatus_Bool, &err)) {
