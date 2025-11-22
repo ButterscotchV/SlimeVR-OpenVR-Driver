@@ -103,6 +103,7 @@ void SlimeVRDriver::VRDriver::RunPoseRequestThread() {
 
         vr::HmdQuaternion_t q = GetRotation(hmd_pose.mDeviceToAbsoluteTracking);
         vr::HmdVector3_t pos = GetPosition(hmd_pose.mDeviceToAbsoluteTracking);
+        vr::HmdVector3_t vel = hmd_pose.vVelocity;
 
         if (current_universe_.has_value()) {
             auto trans = current_universe_.value().second;
@@ -132,6 +133,12 @@ void SlimeVRDriver::VRDriver::RunPoseRequestThread() {
 
             pos.v[0] = pos_x;
             pos.v[2] = pos_z;
+
+            auto vel_x = vel.v[0] * tmp_cos + vel.v[2] * tmp_sin;
+            auto vel_z = vel.v[0] * -tmp_sin + vel.v[2] * tmp_cos;
+
+            vel.v[0] = vel_x;
+            vel.v[2] = vel_z;
         }
 
         messages::Position* hmd_position = google::protobuf::Arena::CreateMessage<messages::Position>(&arena_);
@@ -145,6 +152,9 @@ void SlimeVRDriver::VRDriver::RunPoseRequestThread() {
         hmd_position->set_qy((float) q.y);
         hmd_position->set_qz((float) q.z);
         hmd_position->set_qw((float) q.w);
+        hmd_position->set_vel_x(vel.v[0]);
+        hmd_position->set_vel_y(vel.v[1]);
+        hmd_position->set_vel_z(vel.v[2]);
         bridge_->SendBridgeMessage(*message);
 
         auto now = std::chrono::steady_clock::now();

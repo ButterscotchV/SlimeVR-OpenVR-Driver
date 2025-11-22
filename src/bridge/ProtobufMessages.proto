@@ -74,6 +74,9 @@ message Position {
         FULL = 3;
     }
     optional DataSource data_source = 9;
+    optional float vel_x = 10;
+    optional float vel_y = 11;
+    optional float vel_z = 12;
 }
 
 message UserAction {
